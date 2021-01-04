@@ -8,3 +8,36 @@ react生态：react-redux  react-router dva antDssign styled-Component ReactNati
 生态工具 :   router,antdesign
 高级应用 ： Hooks,新生命周期，状态管理，TS应用
 原理讲解 ： 虚拟DOM，Fiber,diff算法
+
+1 搭建
+npm run eject 会将原本creat react app对webpack，babel等相关配置的封装弹射出来
+
+JSX是JS的语法扩展，使用XML标记的方式直接声明界面
+1 不是模板引擎语言
+2 声明式方式创建UI，处理UI逻辑
+3 遵循JS语法，无学习门槛
+
+JSX规则
+1 在JSX中嵌入表达式，用{}包裹
+2 大写开头作为定义组件，小写tag为原生DOM节点
+3 JSX标签可以有特定属性和子元素
+4 JSX只能有一个根元素(可以使用React.Fragments包裹也可以使用<></>代替)
+
+Fragments 
+1 可以包含并列的子元素，避免生成多余的DOM节点
+2 编写表格组件，包裹子元素让HTML生效
+
+组件
+函数组件（比较轻量）
+1函数组件也叫无状态组件
+2组件内部没有this
+3没有生命周期
+类组件
+
+列表渲染 使用map
+条件渲染 三目运算符  函数  &&
+
+css module 
+1不使用选择器，使用class名定义样式
+2不层叠class，使用一个class定义样式
+3用composes来组合
