@@ -1,8 +1,19 @@
-.title{
-  composes:common-font from "./common.css";
+.title {
+  /* composes: list-font  同一个文件里面*/
+  composes: common-font from "./common.css";
   font-size: 20px;
   color: red;
 }
-.list-font{
+
+.list-font {
   font-weight: bold;
+}
+
+.digital {
+  border-radius: 5px;
+  margin: 0 20px;
+  padding: 10px;
+  border: #eaeaea solid 1px;
+  background-color: #ffffff;
+  box-shadow: 0 0 4px rgba(100, 100, 100, .5);
 }

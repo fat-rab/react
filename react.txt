@@ -41,3 +41,14 @@ css module
 1不使用选择器，使用class名定义样式
 2不层叠class，使用一个class定义样式
 3用composes来组合
+
+React事件要素
+1事件发布
+首先react会将事件绑定到document上面，统一的使用事件监听，并在冒泡阶段处理事件，所以当挂载或者卸载组件的时候
+，只需要在统一的监听位置添加或者删除对象，因此会极大的提高效率，当事件触发的时候，组件会生成一个合成事件
+然后传递到document中，document会通过dispatchEvent回调函数依次执行监听函数
+2事件注册
+组件生成的时候，将虚拟DOM中所有的事件对应的原生事件都注册在document当中一个监听器中
+react事件是合成事件，不是DOM原生事件
+document监听所有支持事件
+使用统一的分发函数dispatchEvent
