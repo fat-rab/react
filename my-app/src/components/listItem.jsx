@@ -5,21 +5,21 @@ import classNames from "classnames/bind";
 const cls = classNames.bind(style);
 //let count = 0;
 class ListItem extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      count: this.props.data.value,
-    };
-    /**
-     * 状态的类型是数组
-     * let _arr=[...this.state.arr,'1']
-     * this.setState({arr:_arr})
-     * 状态类型是对象
-     * const _obj=Object.assign({},this.state.obj,{a:1})
-     * const _obj={...this.state.obj,a:1}
-     * this.setState({obj:_obj})
-     */
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     count: this.props.data.value,
+  //   };
+  //   /**
+  //    * 状态的类型是数组
+  //    * let _arr=[...this.state.arr,'1']
+  //    * this.setState({arr:_arr})
+  //    * 状态类型是对象
+  //    * const _obj=Object.assign({},this.state.obj,{a:1})
+  //    * const _obj={...this.state.obj,a:1}
+  //    * this.setState({obj:_obj})
+  //    */
+  // }
   // checkCount() {
   //   if (count < 0) count = 0;
   // }
@@ -28,31 +28,11 @@ class ListItem extends PureComponent {
    * onClick={this.handleDecrease.bind(this, this.props.data.id)}
    * onClick={(e) => {this.handleDecrease(e,this.props.data.id)}} //如果需要使用事件对象，箭头函数方法需要手动传入
    */
-  handleDecrease = () => {
-    this.setState(
-      {
-        count: this.state.count - 1,
-      },
-      () => {
-        if (this.state.count < 0) {
-          this.setState({
-            count: 0,
-          });
-        }
-      }
-    );
-    //使用箭头函数，否则this指向window（或者使用bind ，onClick={this.handleDecrease.bind(this)}）
-    //this.checkCount();
-  };
-  handleIncrease = () => {
-    this.setState({
-      count: this.state.count + 1,
-    });
-  };
+ 
   //避免在没有改变数据的情况下，修改虚拟DOM,建议使用PureComponent
   // shouldComponentUpdate(nextProps, nextState) {
   //   console.log(this.props, nextProps, this.state, nextState);
-  //   if (this.state.count === nextState.count) return false;
+  //   if (this.props.data.value === nextState.count) return false;
   //   if (this.props.data.id === nextProps.data.id) return false;
   //   return true;
   // }
@@ -67,19 +47,25 @@ class ListItem extends PureComponent {
           <span className={cls("title")}>{this.props.data.name}</span>
         </div>
         <div className="col-1 themed-grid-col">￥{this.props.data.price}</div>
-        <div className={`col-2 themed-grid-col${this.state.count ? "" : "-s"}`}>
+        <div
+          className={`col-2 themed-grid-col${
+            this.props.data.value ? "" : "-s"
+          }`}
+        >
           <button
             onClick={() => {
-              this.handleDecrease(this.props.data.id);
+              this.props.handleDecrease(this.props.data.id);
             }}
             type="button"
             className="btn btn-primary"
           >
             -
           </button>
-          <span className={cls("digital")}>{this.state.count}</span>
+          <span className={cls("digital")}>{this.props.data.value}</span>
           <button
-            onClick={this.handleIncrease}
+            onClick={() => {
+              this.props.handleIncrease(this.props.data.id);
+            }}
             type="button"
             className="btn btn-primary"
           >
@@ -87,12 +73,12 @@ class ListItem extends PureComponent {
           </button>
         </div>
         <div className="col-1 themed-grid-col">
-          ￥{this.props.data.price * this.state.count}
+          ￥{this.props.data.price * this.props.data.value}
         </div>
         <div className="col-1 themed-grid-col">
           <button
             onClick={() => {
-              this.props.onDelete(this.props.data.id);
+              this.props.handleDetele(this.props.data.id);
             }}
             type="button"
             className="btn btn-danger btn-sm"

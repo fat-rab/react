@@ -1,7 +1,7 @@
 import "./App.css";
 import React, { Component } from "react";
-import ListItem from "./components/listItem";
-
+import ListPage from "./components/listPage";
+import Navbar from "./components/navBar";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -10,7 +10,7 @@ class App extends Component {
         {
           id: 1,
           name: "小米屌丝机",
-          price: 99,
+          price: 9.9,
           stock: 20,
           value: 4,
         },
@@ -31,42 +31,67 @@ class App extends Component {
       ],
     };
   }
-  renderList() {
-    // if (listData.length === 0) {
-    //   return <div className="text-content">购物车是空的</div>;
-    // }
-    return this.state.listData.map((item) => {
-      return (
-        <ListItem
-          key={item.id}
-          data={item}
-          onDelete={this.handleDetele}
-        ></ListItem>
-      );
+  handleDecrease = (id) => {
+    const _listData = this.state.listData.map((item) => {
+      if (item.id === id) {
+        const _item = { ...item };
+        _item.value--;
+        if (item.value < 0) _item.value = 0;
+        return _item;
+      } else {
+        return item;
+      }
     });
-  }
+    this.setState({
+      listData: _listData,
+    });
+  };
+  handleIncrease = (id) => {
+    const _listData = this.state.listData.map((item) => {
+      if (item.id === id) {
+        const _item = { ...item };
+        _item.value++;
+        return _item;
+      } else {
+        return item;
+      }
+    });
+    this.setState({
+      listData: _listData,
+    });
+  };
+
   handleDetele = (id) => {
     const listData = this.state.listData.filter((item) => item.id !== id);
     this.setState({
       listData,
     });
   };
-  handleReset = () => {};
+  handleReset = () => {
+    const listData = this.state.listData.map((item) => {
+      const _item = { ...item };
+      _item.value = 0;
+      return _item;
+    });
+    this.setState({
+      listData,
+    });
+  };
   render() {
     return (
-      <div className="container">
-        <button
-          onClick={this.handleReset}
-          type="button"
-          className="btn btn-primary"
-        >
-          重置
-        </button>
-        {this.state.listData.length === 0 && (
-          <div className="text-content">购物车是空的</div>
-        )}
-        {this.renderList()}
-      </div>
+      //React.Fragments
+      <>
+        <Navbar
+          length={this.state.listData.length}
+          handleReset={this.handleReset}
+        ></Navbar>
+        <ListPage
+          listData={this.state.listData}
+          handleDetele={this.handleDetele}
+          handleDecrease={this.handleDecrease}
+          handleIncrease={this.handleIncrease}
+        ></ListPage>
+      </>
     );
   }
 }

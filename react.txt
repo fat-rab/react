@@ -1,5 +1,5 @@
 react =>用于构建用户界面的 JavaScript 库，对组件的状态做出响应，并且更新页面的UI
-
+http://huziketang.mangojuice.top/books/react/lesson17
 react生态：react-redux  react-router dva antDssign styled-Component ReactNative   TaraJS
 
 学习过程 
@@ -52,3 +52,15 @@ React事件要素
 react事件是合成事件，不是DOM原生事件
 document监听所有支持事件
 使用统一的分发函数dispatchEvent
+
+优化渲染
+1PureComponent
+2shouldComponentUpdate(nextState,nextProps)
+
+使用不可变数据
+避免引用产生的副作用，做成错误（PureComponent）
+
+stateful和stateless
+Stateful  （有状态组件,类组件，容器组件）
+stateless   (无状态组件，函数组件，展示组件)
+尽可能通过状态提升原则，将需要的状态提取到父组件中，而其他的组件使用无状态组件编写
