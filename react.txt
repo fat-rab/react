@@ -64,3 +64,54 @@ stateful和stateless
 Stateful  （有状态组件,类组件，容器组件）
 stateless   (无状态组件，函数组件，展示组件)
 尽可能通过状态提升原则，将需要的状态提取到父组件中，而其他的组件使用无状态组件编写
+
+生命周期 （旧）
+创建阶段
+1执行constructor构造函数，初始化props和state（getDefaultProps和getInitialState） （初始阶段，2，3，4是挂载阶段）
+初始化内部状态，如果没有显示的调用constructor则会有一个默认的constructor会被添加
+需要使用super()调用基类的构造方法,将父组件的props注入给子组件
+可以直接修改state,定义this.state的初始内容 
+2componentWillMount （移除）
+组件挂在到DOM之前调用（ui渲染完成之前），并且只会执行一次
+在这里调用setState不会触发render，所以可以将需要的操作提前到constructor当中
+3render 
+类组件必须要有的方法，返回一个顶级的react元素（不能有并列元素）
+渲染的是虚拟DOM的一个React对象
+不能再render函数中调用this.setState
+父组件先render 然后才是子组件
+4componentDidMount
+在Ui渲染完成后调用（此时已经有了真实的DOM），只执行一次，可以用来获取外部的数据资源
+父组件的componentDidMount在子组件的componentDidMount全部执行完毕之后，才会执行
+更新阶段
+更新组件分成两类（三种情况）
+1父组件重新render ，
+父组件重新render引起子组件重新render的情况有两种
+a 每当父组件重新render导致重新传props，引起的子组件的render,可以通过shouldComponentUpdate优化
+b 在componentWillRecieveProps方法中，将props转换成自己的state,这种情况不会引起二次渲染
+componentWillReceiveProps(nextProps) { // 父组件重传props时就会调用这个方法
+        this.setState({someThings: nextProps.someThings});
+}
+2第二种就是组件本身调用setState,可以通过shouldComponentUpdate优化
+1componentWillRecieveProps(只有props更新会触发) （移除）
+组件接受到新的props的时候触发，可以用来比较新老props，不推荐使用，有新的生命周期函数取代
+2shouldComponentUpdate
+比较新老props和state 判断是否执行render 方法，可以用pureComponent自动执行
+3componentWillUpdate （移除）
+此方法在调用render方法前执行，在这边可执行一些组件更新发生前的工作，一般较少用。
+4render
+5componentDidUpdate
+每次ui更新时候调用 更新一些外部数据资源
+接受nextProps和nextState，可以与原来的数据进行对比，进行一些业务逻辑的处理
+卸载阶段
+componentWillUnmount
+组件移除的时候调用
+可以用来做资源的释放，比如将绑定的timer清理
+
+react组件设计模式
+1 高阶组件hoc:用于逻辑复用  ,使用拥有复用逻辑的函数处理不同的组件
+本质是利用一个接受react组件作为参数的函数，返回一个新的react组件
+对已有组件进行封装，形成新的有自己的状态和逻辑的组件
+const newComponent=hoc(oldComponent)
+2函数作为子组件或者函数作为props.children   使用子组件复用逻辑，父组件传入不同的内容
+（1） 定义子组件  在子组件中调用父组件传递得函数  this.props.render(this.state)
+  (2)   使用函数作为props传递给子组件

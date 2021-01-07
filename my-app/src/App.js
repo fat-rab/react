@@ -2,6 +2,8 @@ import "./App.css";
 import React, { Component } from "react";
 import ListPage from "./components/listPage";
 import Navbar from "./components/navBar";
+import ItemA from "./components/hoc/itemA.jsx";
+import ItemB from "./components/rp/itemB";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -91,6 +93,8 @@ class App extends Component {
           handleDecrease={this.handleDecrease}
           handleIncrease={this.handleIncrease}
         ></ListPage>
+        <ItemA id="xx"></ItemA>
+        <ItemB></ItemB>
       </>
     );
   }
