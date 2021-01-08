@@ -119,3 +119,38 @@ const newComponent=hoc(oldComponent)
 函数作为props.children 
 子组件调用this.props.children(this.state)
 父组件传入函数
+
+
+reactRouter
+https://react-router.docschina.org/web/guides/philosophy
+https://react-guide.github.io/react-router-cn/
+Route  比较path属性和当前地址的pathname，当一个<Route>匹配成功，他会渲染其他内容，当它不匹配时，就会渲染NULL
+
+Route 是一个封装好的组件，会自动传入三个props:history,location,match
+history使用浏览器的history对象，在浏览器中导航
+location:目前应用的地址等属性
+match：params 储存传递的参数，isExact 如果匹配整个url:true   path：用于匹配路径模式，url:用于匹配部分url 
+
+
+
+Switch  一个<Switch>会遍历其所有的子<Route>元素，并仅渲染与当前地址匹配的第一个元素
+exact  需要完全匹配
+Link 使用<Link> 作为url的导航，让整个应用不刷新页面在不同网址之间切换
+
+<Route>有三种渲染方式
+<Route component>
+<Route render={(props)=><home data="xx"  {...props} />}>  可以用来给组件传参
+<Route children>
+
+路由传参
+path="/products/:id"
+获取this.props.match.params.id
+path="/posts/:year?/:month?"  参数可选
+
+重定向
+<Route path="/not-fount" component={NotFound}></Route>
+<Route path="/" exact component={Home}></Route>
+<Redirect to="/not-fount"></Redirect>
+这三个配合使用可以让匹配不到的地址不跳转到home ,而是跳转到not-found
+<Redirect from="/mall" to="/products"></Redirect>
+在地址上输入mall 或跳转到products
