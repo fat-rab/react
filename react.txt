@@ -112,6 +112,10 @@ react组件设计模式
 本质是利用一个接受react组件作为参数的函数，返回一个新的react组件
 对已有组件进行封装，形成新的有自己的状态和逻辑的组件
 const newComponent=hoc(oldComponent)
-2函数作为子组件或者函数作为props.children   使用子组件复用逻辑，父组件传入不同的内容
+2Render Props 使用子组件复用逻辑，父组件传入不同的内容
+函数作为子组件或者  
 （1） 定义子组件  在子组件中调用父组件传递得函数  this.props.render(this.state)
   (2)   使用函数作为props传递给子组件
+函数作为props.children 
+子组件调用this.props.children(this.state)
+父组件传入函数
