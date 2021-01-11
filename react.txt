@@ -122,7 +122,7 @@ const newComponent=hoc(oldComponent)
 
 
 reactRouter
-https://react-router.docschina.org/web/guides/philosophy
+https://react-router.docschina.org/
 https://react-guide.github.io/react-router-cn/
 Route  比较path属性和当前地址的pathname，当一个<Route>匹配成功，他会渲染其他内容，当它不匹配时，就会渲染NULL
 
@@ -154,3 +154,6 @@ path="/posts/:year?/:month?"  参数可选
 这三个配合使用可以让匹配不到的地址不跳转到home ,而是跳转到not-found
 <Redirect from="/mall" to="/products"></Redirect>
 在地址上输入mall 或跳转到products
+
+
+antDesign生态 dvaJS umiJS  antDesignPro   motion Design(专注于动画效果) antV(可视化)
