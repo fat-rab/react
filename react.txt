@@ -97,7 +97,7 @@ componentWillReceiveProps(nextProps) { // 父组件重传props时就会调用这
 2shouldComponentUpdate
 比较新老props和state 判断是否执行render 方法，可以用pureComponent自动执行
 3componentWillUpdate （移除）
-此方法在调用render方法前执行，在这边可执行一些组件更新发生前的工作，一般较少用。
+此方法在调用render方法前执行，在这边可执行一些组件更新发生前的工作，一般较少用。使用不当会造成无限循环
 4render
 5componentDidUpdate
 每次ui更新时候调用 更新一些外部数据资源
@@ -157,3 +157,96 @@ path="/posts/:year?/:month?"  参数可选
 
 
 antDesign生态 dvaJS umiJS  antDesignPro   motion Design(专注于动画效果) antV(可视化)
+
+
+虚拟DOM
+是一种编程理念，将UI虚拟的保存在内存中,是内存对象，并且通过某些库渲染成真实的DOM ，这个过程又叫协调
+15版本又叫做 栈协调（stack Reconciler），此时vdom是一个对象
+栈协调的缺点：过程一旦开始，就无法停止，如果页面比较复杂，更新的时间比较长，如果这个时候对DOM进行交互，很可能会卡住
+16版本推出了fiber协调，使用fiber节点来描述DOM节点，fiber节点的数据结构是一个单链表
+单链表：用一组地址任意的存贮单元，存放线性表中的数据元素
+1可阻断的渲染过程
+2适时重启渲染
+3父子组件中来回切换布局更新
+4更清晰的错误处理
+
+原生DOM更新=》直接调用DOM API更新UI
+virtual DOM 更新
+每次render都会产生一份新的react dom,然后virtual DOM 要对新旧 react dom进行比较，从而确定再旧 dom的基础上进行多少变更，确定最优的变更策略之后调用DOM API 更新ui
+
+virtual DOM 如何提高性能
+我们将render产生的virtual DOM 简称vDOM,
+通常调用setState方法触发vdom更新
+通过对比新旧vdom ，确定最优实现新vdom (vitrual DOM Diff)
+
+vitrual DOM Diff 的层次
+1 组件级别比较
+2 元素级别比较
+
+组件级别比较 component diff
+如果组件不同的话，则直接更换组件及其子组件
+元素级别比较
+对元素进行添加删除移动，移动相对复杂，先判断新旧节点是否一样，如果一样调用移动的方法(如果是将后面的节点移动到前面，进行的操作时将前面的节点向后移动)
+
+
+新生命周期react16
+https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/
+挂载时
+constructor getDerivedStateFromProps（静态方法，前面加static） render React更新DOM和refs componentDidMount
+更新时
+getDerivedStateFromProps shouldComponentUpdate render getSnapshotBeforeUpdate
+ReactcomponentDidUpdate 
+卸载时
+componentWillUnmount
+
+挂载阶段
+constructor  构造函数，初始化state，为事件处理函数绑定实例
+getDerivedStateFromProps 第一个参数nextProps，返回一个新的state或者null
+render 渲染函数 更新DOM和refs 
+componentDidMount 挂载成功之后立刻调用
+
+更新阶段的函数
+getDerivedStateFromProps props或者state变化还有forceUpdate的时候触发
+shouldComponentUpdate 判断是否进行更新 forceUpdate会跳过这一步
+render 
+getSnapshotBeforeUpdate render方法之后调用，返回一个dom更改之前的快照，将配合后续的componentDIdUpdate方法使用
+componentDIdUpdate 更新会立刻调用，接受两个参数旧的props和state,如果实现getSnapshotBeforeUpdate，则会返回旧DOM的快照，如果这里需要改变state需要进行条件判断，否则会进入无限循环
+
+卸载阶段
+componentWillUnmount 卸载函数，组件卸载及销毁之前的调用，主要用于清楚一些在生命周期订阅，真实DOM事件，以及setTimeout/setInterval的返回值
+
+异常捕获函数
+componentDidCatch 生命周期方法在后代组件抛出错误后被调用，方法接受两个参数error,info，分别是错误信息和错误组件的栈信息，推荐在此方法中做一些错误日志的上传
+getDerivedStateFromError 在后代组件抛出错误后调用，接受一个参数error表示具体的错误信息，在此方法中兼容错误页面，返回一个变量，当出现一个不可抵抗的错误的时候，优化用户体验
+
+新旧生命周期升级
+1 componentWillMount(移除，如果一定要使用可以用UNSAFE_componentWillMount)
+render 方法之前调用，再次调用setState并不会触发再次渲染，通常会在这个方法中进行页面标题的修改以及一些和再次render不相关的操作
+升级：与state相关的操作挪到constructor中执行，异步操作以到componentDidMount中
+2 componentWillUpdate（UNSAFE_componentWillUpdate）
+在渲染之前调用，不能调用setState，触发循环，内存泄漏
+升级：应该再shouldComponentUpdate 判断更新
+3 componentWillReceiveProps
+接受父级组件传递过来最新的props，转化为组件内的state,判断是否进行更新或者执行异步请求数据
+升级：和渲染相关的props直接渲染，不需要处理为组件内的state，异步请求再componentDidUpdate中处理，
+getDerivedStateFromProps方法替换，需要考虑生命周期的执行顺序
+
+
+react16 npx react-codemod rename-unsafe-lifecycles 更换生命周期函数名称
+
+
+hooks 
+hooks使命
+1逻辑组件复用 ：逻辑与Ui分离，函数组件拥有state，函数组件复用（render props和hoc都有一定的问题）
+render props :通过渲染props来实现逻辑组件复用，  
+问题renderprops通过嵌套组件实现，在实际业务中，会出现嵌套多层，以及梳理props不清晰的问题
+hoc 通过对现有组件进行拓展，增强的方式来实现复用，通常采用包裹方法实现
+问题 告诫组件的时间会额外的增加元素层级，是的页面元素的数量更加臃肿
+
+hooks api
+https://overreacted.io/zh-hans/a-complete-guide-to-useeffect/
+useState 函数组件中的state方法
+useEffect  函数组件处理副作用的方法，第一个参数是执行副作用的方法，第二个是执行的前置条件
+useReducer 另外一种useState 和redux有点类似
+useRef 返回一个突变的ref对象，对象在函数组件的执行周期内一直存在
+useCustom 自定义hooks组件
