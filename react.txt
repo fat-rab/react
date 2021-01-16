@@ -274,6 +274,8 @@ React Concurrent Mode
 
 
 Redux
+https://www.redux.org.cn/docs/introduction/CoreConcepts.html
+https://zhuanlan.zhihu.com/p/20597452
 Redux基础
 1Redux动机
 Redux适合于大型复杂的单页面应用（需要管理的状态多且复杂）
@@ -284,14 +286,19 @@ Redux适合于大型复杂的单页面应用（需要管理的状态多且复杂
 3Redux的三个原则
 3-1单一数据源：整个应用的state被储存在一颗object tree 中，并且这个Object tree只存在于唯一一个store中
 3-2state是只读的：唯一改变state的方法是触发action,action是一个用于描述已发生事件的普通对象
-3-3使用reducer纯函数更具action来执行修改state：可纯函数意味着同样的输入就会有同样的输出,不要再里面：修改传入的参数，执行有副作用的操作，如请求api和路由跳转，调用非纯函数如date.now()
+3-3使用reducer纯函数根据action来执行修改state：纯函数意味着同样的输入就会有同样的输出,不要再里面修改传入的参数，执行有副作用的操作，如请求api和路由跳转，调用非纯函数如date.now()
 
 redux api
 1 createStore 创建redux store来存放应用中所有的state
 2 combineReducers 将多个不同reducer函数作为value的object，合并成一个最终的reducer函数
-3 applyMiddleware 接受自定义功能的middleware来扩展redux
+3 applyMiddleware 接受自定义功能的middleware来扩展redux(扩展异步操作)
 4 compose 函数式编程中的方法，右到左来组合执行参数
 
 react-redux Api 将react和redux关联起来的第三方插件
 1connect 将react组件和redux链接起来
 2provider 提供被connect链接起来的组件能够访问得到store
+
+redux进阶
+1redux异步
+2reselect&immutable Data
+3redux-actions&@rematch/core&dva

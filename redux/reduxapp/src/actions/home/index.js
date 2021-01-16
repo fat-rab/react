@@ -12,3 +12,20 @@ export function updateName(params) {
     payload: params,
   };
 }
+
+export function asynQueryName(params) {
+  return (dispatch) => {
+    setTimeout(() => {
+      dispatch(queryName(params));
+    }, 2000);
+  };
+}
+
+export function asynUpdateName(params) {
+  return (dispatch, getState) => {
+    console.log(getState());
+    setTimeout(() => {
+      dispatch(updateName(params));
+    }, 2000);
+  };
+}
