@@ -246,7 +246,52 @@ hoc 通过对现有组件进行拓展，增强的方式来实现复用，通常�
 hooks api
 https://overreacted.io/zh-hans/a-complete-guide-to-useeffect/
 useState 函数组件中的state方法
-useEffect  函数组件处理副作用的方法，第一个参数是执行副作用的方法，第二个是执行的前置条件
+useEffect  函数组件处理副作用的方法，第一个参数是执行副作用的方法，第二个是执行的前置条件(在 React 组件中执行过数据获取、订阅或者手动修改过 DOM)
 useReducer 另外一种useState 和redux有点类似
 useRef 返回一个突变的ref对象，对象在函数组件的执行周期内一直存在
 useCustom 自定义hooks组件
+
+
+react New Feature
+react Fragments/Portals/Strict Mode
+2 Portals 改变挂载节点得api
+import {createProtal} from "react-dom"
+const  mountDom =document.querySelector("#xx")
+render(){
+ return createProtal(
+ <other/>,
+  mountDom
+)
+}
+3 strict Mode
+strict Mode 提供一个可以显示潜在问题得组件 ,但是包裹的组件会render两遍
+1 检测是否使用即将废弃得生命周期函数
+2 检测是否使用 string ref和findDOMNode 以及老版得context api
+3检测是否多次调用不可预测得副作用
+React Concurrent Mode
+1一个还在试验阶段的特性
+2目的：让react应用能够更好的响应交互并且还能根据用户设备的硬件性能和网络条件进行对应的调节，让应用的体检上一个阶梯
+
+
+Redux
+Redux基础
+1Redux动机
+Redux适合于大型复杂的单页面应用（需要管理的状态多且复杂）
+2Redux核心概念
+2-1 state 应用全局数据的来源，数据驱动视图的核心
+2-2 action 数据发生改变动作的描述
+2-3 reducer 结合state和action ，并返回一个新的state
+3Redux的三个原则
+3-1单一数据源：整个应用的state被储存在一颗object tree 中，并且这个Object tree只存在于唯一一个store中
+3-2state是只读的：唯一改变state的方法是触发action,action是一个用于描述已发生事件的普通对象
+3-3使用reducer纯函数更具action来执行修改state：可纯函数意味着同样的输入就会有同样的输出,不要再里面：修改传入的参数，执行有副作用的操作，如请求api和路由跳转，调用非纯函数如date.now()
+
+redux api
+1 createStore 创建redux store来存放应用中所有的state
+2 combineReducers 将多个不同reducer函数作为value的object，合并成一个最终的reducer函数
+3 applyMiddleware 接受自定义功能的middleware来扩展redux
+4 compose 函数式编程中的方法，右到左来组合执行参数
+
+react-redux Api 将react和redux关联起来的第三方插件
+1connect 将react组件和redux链接起来
+2provider 提供被connect链接起来的组件能够访问得到store
