@@ -195,7 +195,7 @@ https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/
 constructor getDerivedStateFromProps（静态方法，前面加static） render React更新DOM和refs componentDidMount
 更新时
 getDerivedStateFromProps shouldComponentUpdate render getSnapshotBeforeUpdate
-ReactcomponentDidUpdate 
+componentDidUpdate 
 卸载时
 componentWillUnmount
 
@@ -295,10 +295,24 @@ redux api
 4 compose 函数式编程中的方法，右到左来组合执行参数
 
 react-redux Api 将react和redux关联起来的第三方插件
-1connect 将react组件和redux链接起来
+1connect 在容器组件中将react展示组件和redux链接起来
 2provider 提供被connect链接起来的组件能够访问得到store
-
+3在connect调用mapStateToProps 方法指定如何把当前redux store state映射到展示组件的props中，接受两个参数state(redux保存的全局状态)和ownProps(组件本身自带的属性prop)
+4在connect调用mapDispatchToprops方法 返回期望注入到展示组件的props的回调方法
 redux进阶
 1redux异步
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import reducers from "../reducer";
+export default createStore(reducers, applyMiddleware(thunk));
+action.js
+export function asynUpdateName(params) {
+  return (dispatch, getState) => {
+    console.log(getState());
+    setTimeout(() => {
+      dispatch(updateName(params));
+    }, 2000);
+  };
+}
 2reselect&immutable Data
 3redux-actions&@rematch/core&dva
