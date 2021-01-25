@@ -3,10 +3,10 @@ import {
   BrowserRouter,
   Route,
 } from 'react-router-dom';
-import Home from '../containers/home';
-import ReselectDemo from '../containers/reselect';
-import ImmutableDemo from '../containers/immutable';
-import ReduxActionsDemo from '../containers/redux-actions';
+import Home from '@/containers/home';
+import ReselectDemo from '@/containers/reselect';
+import ImmutableDemo from '@/containers/immutable';
+import ReduxActionsDemo from '@/containers/redux-actions';
 
 export default function () {
   return (

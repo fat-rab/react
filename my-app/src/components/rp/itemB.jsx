@@ -3,7 +3,7 @@ import WithToolTip from "./withToolTip";
 const ItemB = (props) => {
   return (
     <div className="container">
-      <WithToolTip>
+      {/* <WithToolTip>
         {({ showToolTip, context }) => (
           <div>
             <button className="btn btn-primary" type="btn">
@@ -16,8 +16,8 @@ const ItemB = (props) => {
             )}
           </div>
         )}
-      </WithToolTip>
-      {/* <WithToolTip
+      </WithToolTip> */}
+      <WithToolTip
         render={({ showToolTip, context }) => (
           <div>
             <button className="btn btn-primary" type="btn">
@@ -30,7 +30,7 @@ const ItemB = (props) => {
             )}
           </div>
         )}
-      ></WithToolTip> */}
+      ></WithToolTip>
     </div>
   );
 };

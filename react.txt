@@ -238,7 +238,7 @@ react16 npx react-codemod rename-unsafe-lifecycles 更换生命周期函数名�
 hooks 
 hooks使命
 1逻辑组件复用 ：逻辑与Ui分离，函数组件拥有state，函数组件复用（render props和hoc都有一定的问题）
-render props :通过渲染props来实现逻辑组件复用，  
+render props :通过渲染props来实现逻辑组件复用(通过children传给子组件一个render函数，子组件通过this.props.children()调用)，  
 问题renderprops通过嵌套组件实现，在实际业务中，会出现嵌套多层，以及梳理props不清晰的问题
 hoc 通过对现有组件进行拓展，增强的方式来实现复用，通常采用包裹方法实现
 问题 告诫组件的时间会额外的增加元素层级，是的页面元素的数量更加臃肿
@@ -300,7 +300,7 @@ react-redux Api 将react和redux关联起来的第三方插件
 3在connect调用mapStateToProps 方法指定如何把当前redux store state映射到展示组件的props中，接受两个参数state(redux保存的全局状态)和ownProps(组件本身自带的属性prop)
 4在connect调用mapDispatchToprops方法 返回期望注入到展示组件的props的回调方法
 redux进阶
-1redux异步
+1redux异步 使用applyMiddleware增强redux，createStore(reducers,applyMiddleware(thunk))
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import reducers from "../reducer";
@@ -315,4 +315,44 @@ export function asynUpdateName(params) {
   };
 }
 2reselect&immutable Data
+2-1reselect 针对mapStateToProps中state在同一数据源中需要筛选的场景，因为mapStateToProps中的state如果带有筛选函数，会导致每次都返回一个新的对象,会导致相同的数据会重新触发一次action中的行为
+2-2immutable Data  避免副作用，状态可追溯，react中用shallowCompare做比较
+2-2-1 immutable 提供完整的api,和普通的js对象不同，如果是新的项目，可以使用
+2-2-2 immer js原生数据结构实现immutable，也提供了一套对应的api,推荐使用
+由于react是浅比较，所以当reducer对嵌套层级比较深的对象属性惊醒修改的时候，不会触发更新，即使数据已经改掉了
+ shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
+  }
 3redux-actions&@rematch/core&dva
+首先要了解redux的不足：
+Redux范式繁琐：完成一次页面渲染，需要在Action层分别定义type,Action方法，Reducer中响应Action方法，完成一次流程需要在多个文件夹中来回切换
+基础功能匮乏：默认只有同步方法，异步数据请求需要安装插件（redux-thunk），复杂功能交由第三方插件完成，有一定的接入成本
+三种解决方案 
+                           多层范式     同步/异步     集成插件
+redux-actions       否               不区分         否
+@rematch/core    否               区分            否
+dva                       否               区分            是
+
+Context  16.3之前
+:React的“上下文”，贯穿了整个React,不需要层层传递，父级节点与应用节点都需要强制类型声明，关键字不一样，全局上下文，贯穿了整个应用
+childContextTypes 父级组件定义，声明了Context对象属性
+getChildContext 父级组件定义，返回context对象，方法名是约定的
+contextTypes 在任意层级的子级组件中定义，就可以在子级组件中使用
+缺陷：父级组件的shouldComponentUpdate返回false,就会引起更新失败，导致子组件接收到的context还是老的，破坏了传递流程。PureComponent或者自定义的优化可能接收不到context更新
+
+new Context  解决了老版context api更新失败的问题
+Provider(生产者) 
+1 createContext 创建一个Context对象，订阅了这个Context对象的组件，会从组件书中离自身最近的那个匹配的Provider中读取当前的context值
+2 Context.Provider 父Context对象放回的Provider组件，允许消费组件订阅context的变化
+Consumer（消费者）
+1 Class.contextType 申明了contextType属性的组件会被赋值一个Context对象，组件内的this.context可以访问最近Context上的值。
+2 Context.Consumer 函数组件订阅Context对象的方式，如同contextType之于Class组件
+
+Context 和Redux 
+Context 
+1 只是解决了数据传递的问题
+2 对复杂应用缺少范式，不利于多人合作，也不利于项目的整体架构
+3 有限使用
+Redux
+1 不单单是指数据传递，更是处理复杂应用的标配
+2 不会被取代
